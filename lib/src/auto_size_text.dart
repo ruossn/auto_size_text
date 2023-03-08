@@ -32,6 +32,7 @@ class AutoSizeText extends StatefulWidget {
     this.textScaleFactor,
     this.maxLines,
     this.semanticsLabel,
+    this.padding,
   })  : textSpan = null,
         super(key: key);
 
@@ -57,6 +58,7 @@ class AutoSizeText extends StatefulWidget {
     this.textScaleFactor,
     this.maxLines,
     this.semanticsLabel,
+    this.padding,
   })  : data = null,
         super(key: key);
 
@@ -200,6 +202,8 @@ class AutoSizeText extends StatefulWidget {
   /// [DefaultTextStyle] value will take precedence. You can use a [RichText]
   /// widget directly to entirely override the [DefaultTextStyle].
   final int? maxLines;
+
+  final double? padding;
 
   /// An alternative semantics label for this text.
   ///
@@ -386,10 +390,12 @@ class _AutoSizeTextState extends State<AutoSizeText>
         strutStyle: widget.strutStyle,
       );
 
-      wordWrapTextPainter.layout(maxWidth: constraints.maxWidth);
+      wordWrapTextPainter.layout(
+          maxWidth: constraints.maxWidth - (widget.padding ?? 0));
 
       if (wordWrapTextPainter.didExceedMaxLines ||
-          wordWrapTextPainter.width > constraints.maxWidth) {
+          wordWrapTextPainter.width >
+              constraints.maxWidth - (widget.padding ?? 0)) {
         return false;
       }
     }
@@ -485,7 +491,7 @@ class _AutoSizePaddingState extends State<AutoSizePadding>
 
   @override
   void dispose() {
-      widget.group._remove(this);
+    widget.group._remove(this);
     super.dispose();
   }
 
