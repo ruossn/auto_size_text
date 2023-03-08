@@ -32,7 +32,7 @@ class AutoSizeText extends StatefulWidget {
     this.textScaleFactor,
     this.maxLines,
     this.semanticsLabel,
-    this.padding,
+    this.horizontalPadding,
   })  : textSpan = null,
         super(key: key);
 
@@ -58,7 +58,7 @@ class AutoSizeText extends StatefulWidget {
     this.textScaleFactor,
     this.maxLines,
     this.semanticsLabel,
-    this.padding,
+    this.horizontalPadding,
   })  : data = null,
         super(key: key);
 
@@ -203,7 +203,7 @@ class AutoSizeText extends StatefulWidget {
   /// widget directly to entirely override the [DefaultTextStyle].
   final int? maxLines;
 
-  final double? padding;
+  final double? horizontalPadding;
 
   /// An alternative semantics label for this text.
   ///
@@ -374,7 +374,7 @@ class _AutoSizeTextState extends State<AutoSizeText>
 
   bool _checkTextFits(
       TextSpan text, double scale, int? maxLines, BoxConstraints constraints) {
-    final maxWidth = constraints.maxWidth - (widget.padding ?? 0) * scale;
+    final maxWidth = constraints.maxWidth - (widget.horizontalPadding ?? 0) * scale;
     if (!widget.wrapWords) {
       final words = text.toPlainText().split(RegExp('\\s+'));
 
