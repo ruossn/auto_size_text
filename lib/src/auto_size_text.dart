@@ -374,7 +374,7 @@ class _AutoSizeTextState extends State<AutoSizeText>
 
   bool _checkTextFits(
       TextSpan text, double scale, int? maxLines, BoxConstraints constraints) {
-    final maxWidth = constraints.maxWidth - (widget.padding ?? 0)*scale ;
+    final maxWidth = constraints.maxWidth - (widget.padding ?? 0) * scale;
     if (!widget.wrapWords) {
       final words = text.toPlainText().split(RegExp('\\s+'));
 
@@ -391,12 +391,10 @@ class _AutoSizeTextState extends State<AutoSizeText>
         strutStyle: widget.strutStyle,
       );
 
-      wordWrapTextPainter.layout(
-          maxWidth: maxWidth ;
+      wordWrapTextPainter.layout(maxWidth: maxWidth);
 
       if (wordWrapTextPainter.didExceedMaxLines ||
-          wordWrapTextPainter.width >
-              maxWidth){
+          wordWrapTextPainter.width > maxWidth) {
         return false;
       }
     }
@@ -465,7 +463,6 @@ class _AutoSizeTextState extends State<AutoSizeText>
     super.dispose();
   }
 }
-
 
 abstract class AutoSizeGroupListener {
   void _notifySync();
