@@ -374,6 +374,7 @@ class _AutoSizeTextState extends State<AutoSizeText>
 
   bool _checkTextFits(
       TextSpan text, double scale, int? maxLines, BoxConstraints constraints) {
+    final maxWidth = constraints.maxWidth - (widget.padding ?? 0)*scale ;
     if (!widget.wrapWords) {
       final words = text.toPlainText().split(RegExp('\\s+'));
 
@@ -391,11 +392,11 @@ class _AutoSizeTextState extends State<AutoSizeText>
       );
 
       wordWrapTextPainter.layout(
-          maxWidth: constraints.maxWidth - (widget.padding ?? 0)*scale);
+          maxWidth: maxWidth ;
 
       if (wordWrapTextPainter.didExceedMaxLines ||
           wordWrapTextPainter.width >
-              constraints.maxWidth - (widget.padding ?? 0)*scale) {
+              maxWidth){
         return false;
       }
     }
@@ -410,11 +411,11 @@ class _AutoSizeTextState extends State<AutoSizeText>
       strutStyle: widget.strutStyle,
     );
 
-    textPainter.layout(maxWidth: constraints.maxWidth);
+    textPainter.layout(maxWidth: maxWidth);
 
     return !(textPainter.didExceedMaxLines ||
         textPainter.height > constraints.maxHeight ||
-        textPainter.width > constraints.maxWidth);
+        textPainter.width > maxWidth);
   }
 
   Widget _buildText(double fontSize, TextStyle style, int? maxLines) {
@@ -465,61 +466,6 @@ class _AutoSizeTextState extends State<AutoSizeText>
   }
 }
 
-class AutoSizePadding extends StatefulWidget {
-  const AutoSizePadding({
-    Key? key,
-    required this.group,
-    required this.defaultFontSize,
-    required this.defaultPadding,
-  }) : super(key: key);
-  final AutoSizeGroup group;
-  final double defaultFontSize;
-  final double defaultPadding;
-
-  @override
-  State<AutoSizePadding> createState() => _AutoSizePaddingState();
-}
-
-class _AutoSizePaddingState extends State<AutoSizePadding>
-    implements AutoSizeGroupListener {
-  @override
-  void initState() {
-    super.initState();
-
-    widget.group.register(this);
-  }
-
-  @override
-  void dispose() {
-    widget.group._remove(this);
-    super.dispose();
-  }
-
-  @override
-  void didUpdateWidget(AutoSizePadding oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (oldWidget.group != widget.group) {
-      oldWidget.group._remove(this);
-      widget.group.register(this);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    widget.group._updateFontSize(this, double.infinity);
-    return SizedBox(
-      width: widget.defaultPadding *
-          widget.group.fontSize /
-          widget.defaultFontSize,
-    );
-  }
-
-  @override
-  void _notifySync() {
-    setState(() {});
-  }
-}
 
 abstract class AutoSizeGroupListener {
   void _notifySync();
