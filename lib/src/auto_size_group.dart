@@ -2,30 +2,30 @@ part of auto_size_text;
 
 /// Controller to synchronize the fontSize of multiple AutoSizeTexts.
 class AutoSizeGroup {
-  final _listeners = <_AutoSizeTextState, double>{};
+  final _listeners = <AutoSizeGroupListener, double>{};
   var _widgetsNotified = false;
-  var _fontSize = double.infinity;
+  var fontSize = double.infinity;
 
-  void _register(_AutoSizeTextState text) {
+  void register(AutoSizeGroupListener text) {
     _listeners[text] = double.infinity;
   }
 
-  void _updateFontSize(_AutoSizeTextState text, double maxFontSize) {
-    final oldFontSize = _fontSize;
-    if (maxFontSize <= _fontSize) {
-      _fontSize = maxFontSize;
+  void _updateFontSize(AutoSizeGroupListener text, double maxFontSize) {
+    final oldFontSize = fontSize;
+    if (maxFontSize <= fontSize) {
+      fontSize = maxFontSize;
       _listeners[text] = maxFontSize;
-    } else if (_listeners[text] == _fontSize) {
+    } else if (_listeners[text] == fontSize) {
       _listeners[text] = maxFontSize;
-      _fontSize = double.infinity;
+      fontSize = double.infinity;
       for (final size in _listeners.values) {
-        if (size < _fontSize) _fontSize = size;
+        if (size < fontSize) fontSize = size;
       }
     } else {
       _listeners[text] = maxFontSize;
     }
 
-    if (oldFontSize != _fontSize) {
+    if (oldFontSize != fontSize) {
       _widgetsNotified = false;
       scheduleMicrotask(_notifyListeners);
     }
@@ -45,7 +45,7 @@ class AutoSizeGroup {
     }
   }
 
-  void _remove(_AutoSizeTextState text) {
+  void _remove(AutoSizeGroupListener text) {
     _updateFontSize(text, double.infinity);
     _listeners.remove(text);
   }
