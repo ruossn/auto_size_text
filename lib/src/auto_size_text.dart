@@ -391,11 +391,11 @@ class _AutoSizeTextState extends State<AutoSizeText>
       );
 
       wordWrapTextPainter.layout(
-          maxWidth: constraints.maxWidth - (widget.padding ?? 0));
+          maxWidth: constraints.maxWidth - (widget.padding ?? 0)*scale);
 
       if (wordWrapTextPainter.didExceedMaxLines ||
           wordWrapTextPainter.width >
-              constraints.maxWidth - (widget.padding ?? 0)) {
+              constraints.maxWidth - (widget.padding ?? 0)*scale) {
         return false;
       }
     }
